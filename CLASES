@@ -1,0 +1,57 @@
+// Clase 1: AccessPoint
+public class AccessPoint {
+    private String fabricante;
+    private int numeroAntena;
+    
+    public AccessPoint(String fabricante, int numeroAntena) {
+        this.fabricante = fabricante;
+        this.numeroAntena = numeroAntena;
+    }
+    public String getFabricante() { return fabricante; }
+    public int getNumeroAntena() { return numeroAntena; }
+}
+
+// Clase 2: Switch
+public class Switch {
+    private String modelo;
+    private int numeroPuertos;
+    
+    public Switch(String modelo, int numeroPuertos) {
+        this.modelo = modelo;
+        this.numeroPuertos = numeroPuertos;
+    }
+    public String getModelo() { return modelo; }
+    public int getNumeroPuertos() { return numeroPuertos; }
+}
+
+// Clase 3: Modem
+public class Modem {
+    private String tecnologia;
+    private String marca;
+    
+    public Modem(String tecnologia, String marca) {
+        this.tecnologia = tecnologia;
+        this.marca = marca;
+    }
+    public String getTecnologia() { return tecnologia; }
+    public String getMarca() { return marca; }
+}
+
+// Clase 4: Router (Usa Composición)
+public class Router {
+    private String ip;
+    private String marca;
+    private AccessPoint ap; // Composición
+    private Switch sw;      // Composición
+    
+    public Router(String ip, String marca, AccessPoint ap, Switch sw) {
+        this.ip = ip;
+        this.marca = marca;
+        this.ap = ap;
+        this.sw = sw;
+    }
+    public String getIp() { return ip; }
+    public String getMarca() { return marca; }
+    public AccessPoint getAp() { return ap; }
+    public Switch getSw() { return sw; }
+}
