@@ -1,0 +1,61 @@
+import java.util.Scanner;
+
+public class Main {
+ public static void main(String[] args) {
+ Scanner scanner = new Scanner(System.in);
+ DeviceManager manager = new DeviceManager();
+ int opcion = 0;
+
+ while (opcion != 4) {
+ System.out.println("\nBienvenido al sistema de registro de equipos");
+ System.out.println("Indique la accion que desea realizar");
+ System.out.println("1. Registrar equipos");
+ System.out.println("2. Ver equipos");
+ System.out.println("3. Buscar router");
+ System.out.println("4. Salir");
+ System.out.print("Opcion: ");
+
+ if (scanner.hasNextInt()) {
+ opcion = scanner.nextInt();
+ scanner.nextLine(); 
+
+ switch (opcion) {
+ case 1:
+ int subOpcion = 0;
+ while (subOpcion != 5) {
+ System.out.println("\n¿Qué equipo desea registrar?");
+ System.out.println("1. Modem\n2. Access Point\n3. Switch\n4. Router\n5. Regresar");
+ System.out.print("Opcion: ");
+ 
+ if (scanner.hasNextInt()) {
+ subOpcion = scanner.nextInt();
+ scanner.nextLine();
+ 
+ if (subOpcion == 1) manager.addModem(manager.fetchModemFromConsole(scanner));
+ else if (subOpcion == 2) manager.addAccessPoint(manager.fetchApFromConsole(scanner, null));
+ else if (subOpcion == 3) manager.addSwitch(manager.fetchSwitchFromConsole(scanner));
+ else if (subOpcion == 4) manager.addRouter(manager.fetchRouterFromConsole(scanner));
+ } else {
+ scanner.nextLine();
+ }
+ }
+ break;
+ case 2:
+ manager.showAllDevices();
+ break;
+ case 3:
+ manager.searchRouters(scanner);
+ break;
+ case 4:
+ System.out.println("Cerrando sistema...");
+ break;
+ default:
+ System.out.println("Opcion invalida.");
+ }
+ } else {
+ scanner.nextLine();
+ }
+ }
+ scanner.close();
+ }
+}
