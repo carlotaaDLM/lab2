@@ -1,0 +1,114 @@
+import java.util.Scanner;
+
+public class DeviceManager {
+    // Arreglos de tamaño fijo
+    private Modem[] listaModems = new Modem[100];
+    private AccessPoint[] listaAPs = new AccessPoint[100];
+    private Switch[] listaSwitches = new Switch[100];
+    private Router[] listaRouters = new Router[100];
+
+    // Contadores para evitar NullPointerException
+    private int contadorModems = 0;
+    private int contadorAPs = 0;
+    private int contadorSwitches = 0;
+    private int contadorRouters = 0;
+    
+    // ... (Aquí irán los métodos que siguen)
+}
+
+
+
+
+// Método dentro de DeviceManager
+    public Switch fetchSwitchFromConsole(Scanner scanner) {
+        System.out.println("Ingrese la informacion del Switch como trama");
+        System.out.print("Trama: ");
+        String trama = scanner.nextLine(); // ej: "cisco_24"
+        String[] partes = trama.split("_");
+        
+        // Convertimos el texto del puerto a número entero[cite: 3]
+        return new Switch(partes[0], Integer.parseInt(partes[1]));
+    }
+
+    public void addSwitch(Switch sw) {
+        // Validamos si es múltiplo de 2 con condicional if/else[cite: 3]
+        if (sw.getNumeroPuertos() % 2 == 0) {
+            listaSwitches[contadorSwitches] = sw; // Guardamos en la posición actual
+            contadorSwitches++; // Aumentamos el contador
+            System.out.println("--Switch agregado--");
+        } else {
+            System.out.println("Error: El numero de puertos no es multiplo de 2.");
+        }
+    }
+
+
+
+
+// Método dentro de DeviceManager
+    public Router fetchRouterFromConsole(Scanner scanner) {
+        System.out.println("Ingrese la informacion del Router");
+        System.out.print("Marca: ");
+        String marca = scanner.nextLine();
+        System.out.print("IP de gestion: ");
+        String ip = scanner.nextLine();
+
+        // Variables temporales para la composición
+        Switch swIntegrado = null;
+        AccessPoint apIntegrado = null;
+
+        System.out.print("¿Tiene Switch integrado? (S/N): ");
+        if (scanner.nextLine().equalsIgnoreCase("S")) { // Ignora mayúsculas/minúsculas[cite: 3]
+            swIntegrado = fetchSwitchFromConsole(scanner); // Reutilizamos el método anterior
+        }
+
+        System.out.print("¿Tiene Access Point integrado? (S/N): ");
+        if (scanner.nextLine().equalsIgnoreCase("S")) {
+            System.out.print("Numero de antenas: ");
+            int antenas = Integer.parseInt(scanner.nextLine());
+            apIntegrado = new AccessPoint(marca, antenas); 
+        }
+
+        return new Router(ip, marca, apIntegrado, swIntegrado);
+    }
+
+    public void addRouter(Router nuevoRouter) {
+        // Recorremos solo hasta donde hay datos usando el contador[cite: 3]
+        for (int i = 0; i < contadorRouters; i++) {
+            // Comparamos cadenas de texto con .equals()[cite: 3]
+            if (listaRouters[i].getIp().equals(nuevoRouter.getIp())) {
+                return; // Corta la ejecución, no guarda nada
+            }
+        }
+        listaRouters[contadorRouters] = nuevoRouter;
+        contadorRouters++;
+        System.out.println("--Router agregado--");
+    }
+
+
+
+
+
+// Método dentro de DeviceManager
+    public void searchRouters(Scanner scanner) {
+        if (contadorRouters == 0) {
+            System.out.println("No hay routers registrados");
+            return;
+        }
+
+        System.out.print("Ingrese la palabra a buscar: ");
+        String palabra = scanner.nextLine();
+        int encontrados = 0;
+
+        for (int i = 0; i < contadorRouters; i++) {
+            Router r = listaRouters[i];
+            // Si la palabra coincide con la IP o con la Marca usando || (OR)[cite: 3]
+            if (r.getIp().equals(palabra) || r.getMarca().equalsIgnoreCase(palabra)) {
+                System.out.println("Marca: " + r.getMarca() + " / IP: " + r.getIp());
+                encontrados++;
+            }
+        }
+
+        if (encontrados == 0) {
+            System.out.println("No se encontro ningun router");
+        }
+    }
